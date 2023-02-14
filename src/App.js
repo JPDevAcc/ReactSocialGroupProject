@@ -28,7 +28,6 @@ function App() {
   const addCard = (userId, imageUrl, text) => {
     const cardDef = { [getNextPostId()]: {userId, imageUrl, text, likeCount: 0} };
     localStorage.setItem("cardDefs", JSON.stringify({...cardDefs, ...cardDef}))
-		console.log("DEBUG2 :", {...cardDefs, ...cardDef}) ;
     changeCardDefs((cardDefs) => ({...cardDefs, ...cardDef}));
   }
 
@@ -45,10 +44,8 @@ function App() {
 	// Restore from localStorage on component mount
   useEffect(() => {
     const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) ;
-		console.log({cardDefs}) ;
     if (cardDefs) { 
 			changeCardDefs(cardDefs) ;
-			console.log("DEBUG ", Object.keys(cardDefs).length) ;
 			changeNextPostId(Object.keys(cardDefs).length) ;
 		}
   }, []) ;
