@@ -8,25 +8,28 @@ import MyNavBar from './components/navbar' ;
 import View from './View'
 import Add from './Add';
 
-function App(){
+function App() {
+	// Hard-coded users for now
 	const [users, changeUsers] = useState({
-		1: { username: 'Bob', imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' },
-		2: { username: 'Bob2', imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' }
+		0: { username: 'Bob', imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' },
+		1: { username: 'Bob2', imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' }
 	}) ;
+	const userId = 0 ;
 
-  const [cardDefs, changeCardDefs] = useState({
-    1: { 
-			userId: 1,
-			imageUrl: 'https://images.unsplash.com/photo-1675530437124-f3672c7aa815?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80', 
-			text: 'Text1',
-			likeCount: 0
-		}
-}) ;
+  const [cardDefs, changeCardDefs] = useState({}) ;
+	const [nextPostId, changeNextPostId] = useState(0) ;
+
+	function getNextPostId() {
+		const nextPostIdTemp = nextPostId ;
+		changeNextPostId(a => a + 1) ;
+		return nextPostIdTemp ;
+	}
 
   const addCard = (userId, imageUrl, text) => {
-    const cardDef = {userId, imageUrl, text, likeCount: 0};
-    localStorage.setItem("cardDefs", JSON.stringify({...cardDefs, cardDef}))
-    changeCardDefs((cardDefs) => ({...cardDefs, cardDef}));
+    const cardDef = { [getNextPostId()]: {userId, imageUrl, text, likeCount: 0} };
+    localStorage.setItem("cardDefs", JSON.stringify({...cardDefs, ...cardDef}))
+		console.log("DEBUG2 :", {...cardDefs, ...cardDef}) ;
+    changeCardDefs((cardDefs) => ({...cardDefs, ...cardDef}));
   }
 
 	function handleAddLike(postId) {
@@ -41,11 +44,15 @@ function App(){
 
 	// Restore from localStorage on component mount
   useEffect(() => {
-    const cardDefs = localStorage.getItem("cardDefs");
-    if (cardDefs) changeCardDefs(JSON.parse(cardDefs)) ;
+    const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) ;
+		console.log({cardDefs}) ;
+    if (cardDefs) { 
+			changeCardDefs(cardDefs) ;
+			console.log("DEBUG ", Object.keys(cardDefs).length) ;
+			changeNextPostId(Object.keys(cardDefs).length) ;
+		}
   }, []) ;
 
-	const userId = 1 ;
 
 	return (
 		<div>
