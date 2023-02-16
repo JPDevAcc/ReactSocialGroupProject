@@ -5,17 +5,27 @@ import { Routes,Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import MyNavBar from './components/navbar' ;
+import UserRegister from './UserRegister' ;
 import View from './View'
 import Add from './Add';
 import Likes from './components/Likes';
 
 function App() {
 	// Hard-coded users for now
+	const defaultUser = {
+		username: 'Bob', imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80'
+	} ;
 	const [users, changeUsers] = useState({
-		0: { username: 'Bob', imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' },
-		1: { username: 'Bob2', imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80' }
+		0: { ...defaultUser },
 	}) ;
-	const userId = 0 ;
+	const [nextUserId, changeNextUserId] = useState(1) ; // TODO: Change to zero when test user removed
+	const [currentUserId, changeCurrentUserId] = useState(0) ; 
+
+	function getNextUserId() {
+		const nextIdTemp = nextUserId ;
+		changeNextUserId(a => a + 1) ;
+		return nextIdTemp ;
+	}
 
   const [cardDefs, changeCardDefs] = useState({}) ;
 	const [nextPostId, changeNextPostId] = useState(0) ;
@@ -24,6 +34,14 @@ function App() {
 		const nextPostIdTemp = nextPostId ;
 		changeNextPostId(a => a + 1) ;
 		return nextPostIdTemp ;
+	}
+
+	function addUser(newUser) {
+		const userId = getNextUserId() ;
+		const user = { [userId]: newUser };
+    localStorage.setItem("users", JSON.stringify({...users, ...user}))
+    changeUsers((users) => ({...users, ...user}));
+		changeCurrentUserId(userId) ; // Just switch to the new user for now | TODO: Remove this when user-login implemented
 	}
 
   const addCard = (userId, imageUrl, text) => {
@@ -39,7 +57,9 @@ function App() {
 	function handleAddLike(postId) {
 		const changeLikeCountFunc = (cardDefs) => {
 			let cardDefsNew = {...cardDefs} ;
-			cardDefsNew[postId] = {...cardDefsNew[postId] , likeCount: cardDefsNew[postId].likeCount + 1 } ;
+
+			cardDefsNew[postId] = {...cardDefsNew[postId], likeCount: cardDefsNew[postId].likeCount + 1} ;
+
 			localStorage.setItem("cardDefs", JSON.stringify(cardDefsNew)) ;
 			return cardDefsNew ;
 		}
@@ -59,23 +79,40 @@ function App() {
 
 	// Restore from localStorage on component mount
   useEffect(() => {
-    const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) ;
-    if (cardDefs) { 
-			changeCardDefs(cardDefs) ;
-			changeNextPostId(Object.keys(cardDefs).length) ;
-		}
+    const users = JSON.parse(localStorage.getItem("users")) ;
+		const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) ;
+    initWithData(users, cardDefs) ;
   }, []) ;
 
+	function initWithData(users, cardDefs) {
+		if (!users) users = { 0: {...defaultUser} } ;
+		if (!cardDefs) cardDefs = {} ;
+		changeUsers(users) ;
+		changeCurrentUserId(Object.keys(users).length - 1) ; // (just select last user again for now)
+		changeNextUserId(Object.keys(users).length) ;
+		changeCardDefs(cardDefs) ;
+		changeNextPostId(Object.keys(cardDefs).length) ;
+	}
+
+	// Clear everything!
+	function clearData() {
+		initWithData({ 0: {...defaultUser} }, {}) ;
+		localStorage.clear() ;
+	}
 
 	return (
 		<div>
 
-			<MyNavBar />
+			<MyNavBar clearData={clearData} />
 
 			<Container>
 				<Routes>
 					<Route path="/" element={
 						<View cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
+					} />
+
+					<Route path="/register" element={
+						<UserRegister onSubmit={addUser} />
 					} />
 					
 					<Route path="/view" element={
@@ -83,7 +120,7 @@ function App() {
 					} />
 
 					<Route path="/add" element={
-						<Add onSubmit={(imageUrl, text) => addCard(userId, imageUrl, text)} />
+						<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
 					} />
 					
 				</Routes>
