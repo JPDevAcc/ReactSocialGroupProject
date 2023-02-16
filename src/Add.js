@@ -30,6 +30,7 @@ function Add(props){
 
   const handleChange = (event) => {
 		formValues[event.target.name] = event.target.value;
+		console.log(formValues) ;
   }
 
   const submitHandler = (event) => {
