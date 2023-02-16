@@ -4,7 +4,7 @@ export default function View(props) {
 	return (
 		<div>
 		<h1>Posts</h1>
-			<SocialCards cardDefs={props.cardDefs} users={props.users} handleAddLike={props.handleAddLike} />
+			<SocialCards onSubmit={props.onSubmit} cardDefs={props.cardDefs} users={props.users} likeCount={props.likeCount} handleAddLike={props.handleAddLike} handleDislike={props.handleDislike} />
 		</div>
 	);
 }

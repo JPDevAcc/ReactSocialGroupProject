@@ -1,4 +1,9 @@
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Likes from './Likes';
+import Comments from './Comments';
+import Comment from './Comment';
+import "./socialCards.css"
 
 export default function SocialCard(props) {
 	const cardDef = props.cardDef ;
@@ -19,6 +24,14 @@ export default function SocialCard(props) {
 				<Card.Text>
 					{cardDef.text}
 				</Card.Text>
+				<Likes 
+				likeCount={cardDef.likeCount} 
+				dislikeCount={cardDef.dislikeCount}
+				handleAddLike={() => props.handleAddLike()} 
+				handleDislike={() => props.handleDislike()}					
+				/>
+				<Comments comments={cardDef.comments} />
+				
 			</Card.Body>
 		</Card>
 	)

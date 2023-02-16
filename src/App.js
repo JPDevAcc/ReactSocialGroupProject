@@ -9,7 +9,6 @@ import UserRegister from './UserRegister' ;
 import UserLogin from './UserLogin' ;
 import View from './View'
 import Add from './Add';
-import Likes from './components/Likes';
 import Footer from './components/footer';
 import "./App.css"
 
@@ -53,10 +52,26 @@ function App() {
     changeUsers((users) => ({...users, ...user}));
 	}
 
-  const addCard = (userId, imageUrl, text) => {
-    const cardDef = { [getNextPostId()]: {userId, imageUrl, text, likeCount: 0} };
+  const addCard = (userId, imageUrl, text,) => {
+    const cardDef = { [getNextPostId()]: {userId, imageUrl, text, dislikeCount: 0, likeCount: 0, comments: {}} };
+
     localStorage.setItem("cardDefs", JSON.stringify({...cardDefs, ...cardDef}))
     changeCardDefs((cardDefs) => ({...cardDefs, ...cardDef}));
+  }
+
+  const [nextCommentId, changeNextCommentId] = useState(0) ;
+
+function getNextCommentId() {
+	const nextComIdTemp = nextCommentId ;
+	changeNextCommentId(a => a + 1) ;
+	return nextComIdTemp ;
+}
+
+function addComment(name, text, postId) {
+	const cardDefsNew = {...cardDefs} ;
+	const commentDef = { [getNextCommentId()]: {name, text} };
+	cardDefsNew[postId].comments = {...cardDefsNew[postId].comments, ...commentDef} ;
+	changeCardDefs(cardDefsNew) ;
   }
 
 	function handleAddLike(postId) {
@@ -71,9 +86,11 @@ function App() {
 
 	// Restore from localStorage on component mount
   useEffect(() => {
+	// clearData() ;
     const users = JSON.parse(localStorage.getItem("users")) ;
 		const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) ;
-    initWithData(users, cardDefs) ;
+		const commentDefs = JSON.parse(localStorage.getItem("commentDefs")) ;
+    initWithData(users, cardDefs, commentDefs) ;
   }, []) ;
 
 	function initWithData(users, cardDefs) {
@@ -105,7 +122,6 @@ function App() {
 
 	return (
 		<div>
-
 			<MyNavBar username={currentUserId === null ? null : users[currentUserId].username} userLogout={userLogout} clearData={clearData} />
 
 			<Container className="my-container">
@@ -117,26 +133,23 @@ function App() {
 					<Route path="/register" element={
 						<UserRegister getUserId={getUserId} onSubmit={addUser} />
 					} />
-
-					{currentUserId !== null &&
-						<Route path="/view" element={
-							<View cardDefs={cardDefs} users={users} handleAddLike={(postId) => handleAddLike(postId)} />
-					} />}
-
+					
+          {currentUserId !== null &&
+					<Route path="/view" element={
+						<View onSubmit={ addComment } cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
+           } />}
+ 
 					{currentUserId !== null &&
 						<Route path="/add" element={
 							<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
 					} />}
 					
 				</Routes>
-				
+
 			</Container>
 			<Footer className="footer"/>
 			
 		</div>
 	);
-
-
-
 }
 export default App;
