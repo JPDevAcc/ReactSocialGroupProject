@@ -10,7 +10,6 @@ export default function SocialCard(props) {
 	const user = props.user ;
 
 	return (
-		<>
 		<Card className="social-card">
 			<Card.Header>
 				<div className="social-card-user-heading">
@@ -29,14 +28,11 @@ export default function SocialCard(props) {
 				likeCount={cardDef.likeCount} 
 				dislikeCount={cardDef.dislikeCount}
 				handleAddLike={() => props.handleAddLike()} 
-				handleDislike={() => props.handleDislike()}
-					
+				handleDislike={() => props.handleDislike()}					
 				/>
 				<Comments comments={cardDef.comments} />
 				
 			</Card.Body>
 		</Card>
-		
-		</>
 	)
 }

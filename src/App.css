@@ -1,0 +1,5 @@
+.my-container {
+    
+   
+    min-height: max(100vh, 800px); /* Ensure footer is far enough down if the rest of the content takes up insufficient vertical space */
+}

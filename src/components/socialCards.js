@@ -2,9 +2,6 @@ import SocialCard from "./socialCard" ;
 import Addc from './Addc.js';
 import "./socialCards.css"
 
-
-
-
 export default function SocialCards(props) {
 	console.log(props.cardDefs) ;
 	const socialCards = Object.entries(props.cardDefs).map(([postId, cardDef]) => {
@@ -13,6 +10,7 @@ export default function SocialCards(props) {
 		const handleAddLike = () => {
 			props.handleAddLike(postId) ;
 		} ;
+    
 		const handleDislike = () => {
 			props.handleDislike(postId) ;
 		} ;
