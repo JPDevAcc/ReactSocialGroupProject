@@ -8,6 +8,7 @@ import MyNavBar from './components/navbar' ;
 import UserRegister from './UserRegister' ;
 import View from './View'
 import Add from './Add';
+import Likes from './components/Likes';
 
 function App() {
 	// Hard-coded users for now
@@ -44,19 +45,36 @@ function App() {
 	}
 
   const addCard = (userId, imageUrl, text) => {
-    const cardDef = { [getNextPostId()]: {userId, imageUrl, text, likeCount: 0} };
+    const cardDef = { [getNextPostId()]: {userId, imageUrl, text, dislikeCount: 0, likeCount: 0,} };
     localStorage.setItem("cardDefs", JSON.stringify({...cardDefs, ...cardDef}))
     changeCardDefs((cardDefs) => ({...cardDefs, ...cardDef}));
   }
 
+//   const [likeCount, setLikeCount] = useState(0);
+
+  
+
 	function handleAddLike(postId) {
 		const changeLikeCountFunc = (cardDefs) => {
 			let cardDefsNew = {...cardDefs} ;
+
 			cardDefsNew[postId] = {...cardDefsNew[postId], likeCount: cardDefsNew[postId].likeCount + 1} ;
+
 			localStorage.setItem("cardDefs", JSON.stringify(cardDefsNew)) ;
 			return cardDefsNew ;
 		}
 		changeCardDefs(changeLikeCountFunc) ;
+	}
+
+	function handleDislike(postId) {
+		// console.log(dislikeCount)
+		const changeDislikeCountFunc = (cardDefs) => {
+			let cardDefsNew = {...cardDefs} ;
+			cardDefsNew[postId] = {...cardDefsNew[postId] , dislikeCount: cardDefsNew[postId].dislikeCount + 1} ;
+			localStorage.setItem("cardDefs", JSON.stringify(cardDefsNew)) ;
+			return cardDefsNew ;
+		}
+		changeCardDefs(changeDislikeCountFunc) ;
 	}
 
 	// Restore from localStorage on component mount
@@ -90,7 +108,7 @@ function App() {
 			<Container>
 				<Routes>
 					<Route path="/" element={
-						<View cardDefs={cardDefs} users={users} handleAddLike={(postId) => handleAddLike(postId)} />
+						<View cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
 					} />
 
 					<Route path="/register" element={
@@ -98,7 +116,7 @@ function App() {
 					} />
 					
 					<Route path="/view" element={
-						<View cardDefs={cardDefs} users={users} handleAddLike={(postId) => handleAddLike(postId)} />
+						<View cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
 					} />
 
 					<Route path="/add" element={
