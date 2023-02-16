@@ -9,6 +9,9 @@ import UserRegister from './UserRegister' ;
 import UserLogin from './UserLogin' ;
 import View from './View'
 import Add from './Add';
+import Likes from './components/Likes';
+import Footer from './components/footer';
+import "./App.css"
 
 function App() {
 	// Users state
@@ -105,7 +108,7 @@ function App() {
 
 			<MyNavBar username={currentUserId === null ? null : users[currentUserId].username} userLogout={userLogout} clearData={clearData} />
 
-			<Container>
+			<Container className="my-container">
 				<Routes>
 					<Route path="/" element={
 						<UserLogin onSubmit={userLogin} />
@@ -126,9 +129,14 @@ function App() {
 					} />}
 					
 				</Routes>
+				
 			</Container>
+			<Footer className="footer"/>
+			
 		</div>
 	);
+
+
 
 }
 export default App;

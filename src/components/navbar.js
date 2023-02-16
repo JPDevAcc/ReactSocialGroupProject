@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
+import "./navbar.css"
 
 export default function MyNavbar(props) {
 	return (
 		<div>
-			<Navbar bg="light" expand="md">
-				<Navbar.Brand>Social Cards</Navbar.Brand>
+			<Navbar bg="dark" expand="md">
+				<Navbar.Brand className="nav1">Social Cards</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="me-auto">
