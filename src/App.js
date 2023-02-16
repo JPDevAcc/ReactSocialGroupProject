@@ -84,6 +84,18 @@ function addComment(name, text, postId) {
 		changeCardDefs(changeLikeCountFunc) ;
 	}
 
+	function handleDislike(postId) {
+		// console.log(dislikeCount)
+		const changeDislikeCountFunc = (cardDefs) => {
+			let cardDefsNew = {...cardDefs} ;
+			cardDefsNew[postId] = {...cardDefsNew[postId] , dislikeCount: cardDefsNew[postId].dislikeCount + 1} ;
+			localStorage.setItem("cardDefs", JSON.stringify(cardDefsNew)) ;
+			return cardDefsNew ;
+		}
+		changeCardDefs(changeDislikeCountFunc) ;
+	}
+
+
 	// Restore from localStorage on component mount
   useEffect(() => {
 	// clearData() ;
