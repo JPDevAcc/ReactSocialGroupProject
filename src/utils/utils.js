@@ -22,9 +22,11 @@ export function getError(errorStatusList) {
 }
 
 // Get HTML-formatted message
-export function getMessageHtml(msg) {
+export function getMessageHtml(msg, type = 'err') {
 	if (!msg) return <div className="text-center">&nbsp;</div> ;
-	return <div className='text-center text-danger'>{msg}</div> ;
+	return (type === 'err') ?
+		<div className='text-center text-danger'>{msg}</div> :
+		<div className='text-center text-success'>{msg}</div> ;
 }
 
 // Returns boolean denoting whether there is currently an error
