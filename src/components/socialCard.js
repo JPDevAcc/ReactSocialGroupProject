@@ -1,16 +1,10 @@
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Likes from './Likes';
-import Comments from './Comments';
 
 export default function SocialCard(props) {
 	const cardDef = props.cardDef ;
 	const user = props.user ;
-	
-
 
 	return (
-		<>
 		<Card className="social-card">
 			<Card.Header>
 				<div className="social-card-user-heading">
@@ -25,16 +19,7 @@ export default function SocialCard(props) {
 				<Card.Text>
 					{cardDef.text}
 				</Card.Text>
-				<Likes 
-				likeCount={cardDef.likeCount} 
-				dislikeCount={cardDef.dislikeCount}
-				handleAddLike={() => props.handleAddLike()} 
-				handleDislike={() => props.handleDislike()}
-					
-				/>
 			</Card.Body>
 		</Card>
-		
-		</>
 	)
 }
