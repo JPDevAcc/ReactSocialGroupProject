@@ -1,1 +1,15 @@
-.nav1, .nav-link {color: #378BA4 !important}
+.navbar {
+	padding-left: 8px ;
+	padding-right: 8px ;
+}
+.nav1 {
+	color: #579BB4 !important ;
+	font-weight: 600;
+}
+.nav-link {
+	color: #bcd !important ;
+	font-weight: 600;
+}
+.navbar-username {
+	color: #eee; 
+}

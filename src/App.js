@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container';
 import MyNavBar from './components/navbar' ;
 import UserRegister from './UserRegister' ;
 import UserLogin from './UserLogin' ;
+import Admin from './Admin' ;
 import View from './View'
 import Add from './Add';
 import Footer from './components/footer';
@@ -14,8 +15,16 @@ import "./App.css"
 
 function App() {
 	// Users state
-	const [users, changeUsers] = useState({}) ;
-	const [nextUserId, changeNextUserId] = useState(0) ;
+	const adminUser = {
+		username: 'Admin',
+		password: 'Admin123', // Who needs cryptographic hash functions or strong passwords?
+		imageUrl: 'https://images.unsplash.com/photo-1593486544625-13ef2368e43a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1141&q=80',
+		bio: 'Administrator Bob - Now officially unremovable'
+	} ;
+	const [users, changeUsers] = useState({
+		0: { ...adminUser }, // (must have ID 0)
+	}) ;
+	const [nextUserId, changeNextUserId] = useState(1) ;
 	const [currentUserId, changeCurrentUserId] = useState(null) ; // (initially no user logged in) 
 
 	// Get user id given username (case-insensitive)
@@ -52,6 +61,20 @@ function App() {
     changeUsers((users) => ({...users, ...user}));
 	}
 
+	function removeUser(userId) {
+		const removeUserFunc = (users) => {
+			const usersNew = {...users}
+			delete usersNew[userId] ;
+			return usersNew ;
+		}
+		changeUsers(removeUserFunc) ;
+		localStorage.setItem("users", JSON.stringify(removeUserFunc(users))) ;
+		if (userId === currentUserId) {
+			changeCurrentUserId(null) ;
+			localStorage.setItem("currentUserId", null) ;
+		}
+	}
+
   const addCard = (userId, imageUrl, text,) => {
     const cardDef = { [getNextPostId()]: {userId, imageUrl, text, dislikeCount: 0, likeCount: 0, comments: {}} };
 
@@ -71,7 +94,7 @@ function addComment(name, text, postId) {
 	const cardDefsNew = {...cardDefs} ;
 	const commentDef = { [getNextCommentId()]: {name, text} };
 	cardDefsNew[postId].comments = {...cardDefsNew[postId].comments, ...commentDef} ;
-	changeCardDefs(cardDefsNew) ;
+	changeCardDefs(cardDefsNew) ; ///
   }
 
 	function handleAddLike(postId) {
@@ -85,7 +108,6 @@ function addComment(name, text, postId) {
 	}
 
 	function handleDislike(postId) {
-		// console.log(dislikeCount)
 		const changeDislikeCountFunc = (cardDefs) => {
 			let cardDefsNew = {...cardDefs} ;
 			cardDefsNew[postId] = {...cardDefsNew[postId] , dislikeCount: cardDefsNew[postId].dislikeCount + 1} ;
@@ -95,24 +117,24 @@ function addComment(name, text, postId) {
 		changeCardDefs(changeDislikeCountFunc) ;
 	}
 
-
 	// Restore from localStorage on component mount
   useEffect(() => {
-	// clearData() ;
-    const users = JSON.parse(localStorage.getItem("users")) ;
-		const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) ;
-		const commentDefs = JSON.parse(localStorage.getItem("commentDefs")) ;
-    initWithData(users, cardDefs, commentDefs) ;
+    const users = JSON.parse(localStorage.getItem("users")) || undefined ;
+		const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) || undefined ;
+		const currentUserId = JSON.parse(localStorage.getItem("currentUserId")) || undefined ;
+    initWithData(users, cardDefs, currentUserId) ;
   }, []) ;
 
-	function initWithData(users, cardDefs) {
-		if (!users) users = {} ;
-		if (!cardDefs) cardDefs = {} ;
+	function initWithData(users = {0: { ...adminUser }}, cardDefs = {}, currentUserId = null) {
 		changeUsers(users) ;
-		changeCurrentUserId(null) ; // (no logged in user)
-		changeNextUserId(Object.keys(users).length) ;
+		changeCurrentUserId(currentUserId) ;
+		changeNextUserId(nextIdFromData(users)) ;
 		changeCardDefs(cardDefs) ;
-		changeNextPostId(Object.keys(cardDefs).length) ;
+		changeNextPostId(nextIdFromData(cardDefs)) ;
+	}
+
+	function nextIdFromData(data) {
+		return Object.keys(data).reduce((max, id) => Math.max(max, id), -1) + 1 ;
 	}
 
 	// Clear everything!
@@ -124,7 +146,10 @@ function addComment(name, text, postId) {
 	function userLogin(formValues) {
 		const userId = getUserId(formValues.username) ;
 		const credentialsMatch = (userId !== null && formValues.password === users[userId].password) ; // User exists and passwords match?
-		if (credentialsMatch) changeCurrentUserId(userId) ; // Make this the current user if credentials were okay
+		if (credentialsMatch) {
+			changeCurrentUserId(userId) ; // Make this the current user if credentials were okay
+			localStorage.setItem("currentUserId", JSON.stringify(userId)) ;
+		}
 		return credentialsMatch ;
 	}
 
@@ -154,6 +179,11 @@ function addComment(name, text, postId) {
 					{currentUserId !== null &&
 						<Route path="/add" element={
 							<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
+					} />}
+
+					{currentUserId === "0" && 
+						<Route path="/admin" element={
+							<Admin users={users} removeUser={removeUser} clearDB={clearData} />
 					} />}
 					
 				</Routes>
