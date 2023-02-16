@@ -1,59 +1,124 @@
+import {useState} from 'react';
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-
-import toastr from 'toastr';
-import 'toastr/build/toastr.min.css';
+import { useNavigate } from "react-router-dom";
+import * as utils from "./utils/utils";
 
 export default function UserRegister(props) {
-	const formValues = {
+	const navigate = useNavigate();
+
+	// Minimum password length
+	const pwdMinLength = 8 ;
+
+	// Form fields
+	const [formValues, changeFormValues] = useState({
 		username: "",
+		password: "",
+		password_confirm: "",
 		imageUrl: "",
 		bio: ""
+	}) ;
+
+	// === STATUS HANDLING ===
+	// Error-status for fields
+	const [errorStatusList, changeErrorStatusList] = useState({
+		username: '',
+		password: ''
+	}) ;
+	// Success status
+	const [successMsg, changeSuccessMsg] = useState(null) ;
+
+	// Set and remove error-status for the specified category
+	function setErrorStatus(category, msg) {
+		utils.setErrorStatus(changeErrorStatusList, category, msg) ;
+	}
+	function removeErrorStatus(category) {
+		utils.removeErrorStatus(changeErrorStatusList, category) ;
+	}
+	// Retrieve active (non-blank) error
+	function getError() {
+		return utils.getError(errorStatusList) ;
+	}
+	// Get current HTML error message
+	function getErrorMessageHtml() {
+		return utils.getMessageHtml(getError()) ;
+	}
+	// Get current HTML success message
+	function getSuccessMessageHtml() {
+		return utils.getMessageHtml(successMsg) ;
+	}
+	// Returns boolean denoting whether there is currently an error
+	function isError() {
+		return utils.isError(errorStatusList) ;
 	}
 
-  toastr.options = {
-    "closeButton": false,
-    "debug": false,
-    "newestOnTop": false,
-    "progressBar": true,
-    "positionClass": "toast-top-right",
-    "preventDuplicates": false,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-  }
-
+	// Handle form field user-input
   const handleChange = (event) => {
-		formValues[event.target.name] = event.target.value;
+		const newFormValues = {...formValues} ;
+		const fieldName = event.target.name ;
+		const newValue = event.target.value;
+		newFormValues[fieldName] = newValue;
+
+		if (fieldName === 'username') {
+			if (newValue === '') setErrorStatus('username', 'Username required') ;
+			else if (props.getUserId(newValue) !== null) setErrorStatus('username', 'Username already taken') ;
+			else removeErrorStatus('username') ;
+		}
+		else if (['password', 'password_confirm'].includes(fieldName)) {
+			if (newFormValues.password.length < 8) setErrorStatus('password', 'Password too short') ;
+			else if (newFormValues.password !== newFormValues.password_confirm) setErrorStatus('password', 'Password mismatch') ;
+			else removeErrorStatus('password') ;
+		}
+		changeFormValues(newFormValues) ;
   }
 
+	// Handle form submission
   const submitHandler = (event) => {
     event.preventDefault();
     props.onSubmit({...formValues});
-		toastr["success"]("User Created", "Success")
+		changeSuccessMsg('Registration successful - please wait to be redirected to the login page') ;
+		setTimeout(() => navigate("/"), 3000);
   }
 
+	// Template
   return (
 		<div>
+			{getErrorMessageHtml()}
+			{getSuccessMessageHtml()}
+
 			<Form onSubmit={(event) => submitHandler(event)}>
 				<Form.Group controlId="username">
 					<Form.Label>Username</Form.Label>
 					<Form.Control 
 						name="username"
+						onChange={(event)=>handleChange(event)}
+						disabled={successMsg}
+					/>
+				</Form.Group>
+				<Form.Group controlId="password">
+					<Form.Label>Password (min {pwdMinLength} characters)</Form.Label>
+					<Form.Control 
+						name="password"
+						type="password"
 						onChange={(event)=>handleChange(event)}  
+						disabled={successMsg}  
+					/>
+				</Form.Group>
+				<Form.Group controlId="password_confirm">
+					<Form.Label>Confirm Password</Form.Label>
+					<Form.Control 
+						name="password_confirm"
+						type="password"
+						onChange={(event)=>handleChange(event)}
+						disabled={successMsg}  
 					/>
 				</Form.Group>
 				<Form.Group controlId="imageUrl">
-					<Form.Label>Image URL</Form.Label>
+					<Form.Label>Profile Image URL</Form.Label>
 					<Form.Control 
 						name="imageUrl"
-						onChange={(event)=>handleChange(event)}  
+						onChange={(event)=>handleChange(event)}
+						disabled={successMsg}  
 					/>
 				</Form.Group>
 				<Form.Group controlId="bio">
@@ -61,12 +126,13 @@ export default function UserRegister(props) {
 					<Form.Control 
 						name="bio"
 						as="textarea"
-						onChange={(event)=>handleChange(event)}  
+						onChange={(event)=>handleChange(event)}
+						disabled={successMsg}   
 					/>
 				</Form.Group>
 				
-				<Button variant="primary" type="submit">
-					Create User
+				<Button variant="primary" type="submit" disabled={isError() || successMsg}>
+					Register
 				</Button>
 			</Form>
 		</div>
