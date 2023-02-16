@@ -13,11 +13,12 @@ export default function MyNavbar(props) {
 					<Nav className="me-auto">
 						<Link className="nav-link" to="/">Login</Link>
 						<Link className="nav-link" to="/register">Register</Link>
-						<Link className="nav-link" to="/view">View</Link>
-						<Link className="nav-link" to="/add">Add</Link>
+						<Link className={props.username ? 'nav-link' : 'd-none'} to="/view">View</Link>
+						<Link className={props.username ? 'nav-link' : 'd-none'} to="/add">Add</Link>
 					</Nav>
 					<div className="d-flex">
-						<div className="me-4 align-self-center">Logged in as <b>{props.username}</b></div>
+						{props.username && <div className="me-4 align-self-center">Logged in as <b>{props.username}</b></div> }
+						<Button onClick={props.userLogout} className="me-2">Log out</Button>
 						<Button onClick={props.clearData}>Clear Data</Button>
 					</div>
 				</Navbar.Collapse>
