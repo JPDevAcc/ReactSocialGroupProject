@@ -9,6 +9,9 @@ import UserRegister from './UserRegister' ;
 import View from './View'
 import Add from './Add';
 import Likes from './components/Likes';
+import Footer from './components/footer';
+import "./App.css"
+
 
 function App() {
 	// Hard-coded users for now
@@ -105,7 +108,7 @@ function App() {
 
 			<MyNavBar clearData={clearData} />
 
-			<Container>
+			<Container className="my-container">
 				<Routes>
 					<Route path="/" element={
 						<View cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
@@ -124,9 +127,14 @@ function App() {
 					} />
 					
 				</Routes>
+				
 			</Container>
+			<Footer className="footer"/>
+			
 		</div>
 	);
+
+
 
 }
 export default App;
