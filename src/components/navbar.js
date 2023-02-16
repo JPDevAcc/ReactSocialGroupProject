@@ -18,8 +18,8 @@ export default function MyNavbar(props) {
 						<Link className={props.username ? 'nav-link' : 'd-none'} to="/add">Add</Link>
 					</Nav>
 					<div className="d-flex">
-						{props.username && <div className="me-4 align-self-center">Logged in as <b>{props.username}</b></div> }
-						<Button onClick={props.userLogout} className="me-2">Log out</Button>
+						{!props.username || <div className="me-4 align-self-center">Logged in as <b>{props.username}</b></div>}
+						{!props.username || <Button onClick={props.userLogout} className="me-2">Log out</Button>}
 						<Button onClick={props.clearData}>Clear Data</Button>
 					</div>
 				</Navbar.Collapse>
