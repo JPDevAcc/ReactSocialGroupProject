@@ -11,17 +11,10 @@ import View from './View'
 import Add from './Add';
 
 function App() {
-	// Example user (as things currently break with no user on the system)
-	const defaultUser = {
-		username: 'Bob',
-		password: 'DoNotDeleteMe!', // Who needs cryptographic hash functions? - Plaintext for the win!
-		imageUrl: 'https://images.unsplash.com/photo-1640951613773-54706e06851d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80'
-	} ;
-	const [users, changeUsers] = useState({
-		0: { ...defaultUser },
-	}) ;
-	const [nextUserId, changeNextUserId] = useState(1) ; // TODO: Change to zero when example user removed
-	const [currentUserId, changeCurrentUserId] = useState(0) ; 
+	// Users state
+	const [users, changeUsers] = useState({}) ;
+	const [nextUserId, changeNextUserId] = useState(0) ;
+	const [currentUserId, changeCurrentUserId] = useState(null) ; // (initially no user logged in) 
 
 	// Get user id given username (case-insensitive)
 	function getUserId(username) {
@@ -81,10 +74,10 @@ function App() {
   }, []) ;
 
 	function initWithData(users, cardDefs) {
-		if (!users) users = { 0: {...defaultUser} } ;
+		if (!users) users = {} ;
 		if (!cardDefs) cardDefs = {} ;
 		changeUsers(users) ;
-		changeCurrentUserId(Object.keys(users).length - 1) ; // (just select last user again for now)
+		changeCurrentUserId(null) ; // (no logged in user)
 		changeNextUserId(Object.keys(users).length) ;
 		changeCardDefs(cardDefs) ;
 		changeNextPostId(Object.keys(cardDefs).length) ;
@@ -92,7 +85,7 @@ function App() {
 
 	// Clear everything!
 	function clearData() {
-		initWithData({ 0: {...defaultUser} }, {}) ;
+		initWithData() ;
 		localStorage.clear() ;
 	}
 
@@ -103,10 +96,14 @@ function App() {
 		return credentialsMatch ;
 	}
 
+	function userLogout() {
+		changeCurrentUserId(null) ;
+	}
+
 	return (
 		<div>
 
-			<MyNavBar username={users[currentUserId].username} clearData={clearData} />
+			<MyNavBar username={currentUserId === null ? null : users[currentUserId].username} userLogout={userLogout} clearData={clearData} />
 
 			<Container>
 				<Routes>
@@ -117,14 +114,16 @@ function App() {
 					<Route path="/register" element={
 						<UserRegister getUserId={getUserId} onSubmit={addUser} />
 					} />
-					
-					<Route path="/view" element={
-						<View cardDefs={cardDefs} users={users} handleAddLike={(postId) => handleAddLike(postId)} />
-					} />
 
-					<Route path="/add" element={
-						<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
-					} />
+					{currentUserId !== null &&
+						<Route path="/view" element={
+							<View cardDefs={cardDefs} users={users} handleAddLike={(postId) => handleAddLike(postId)} />
+					} />}
+
+					{currentUserId !== null &&
+						<Route path="/add" element={
+							<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
+					} />}
 					
 				</Routes>
 			</Container>
