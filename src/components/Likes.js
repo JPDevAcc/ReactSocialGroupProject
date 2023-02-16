@@ -1,19 +1,7 @@
 import Button from 'react-bootstrap/Button';
-import { useState } from 'react';
 
 export default function Likes(props) {
 
-  // const [likeCount, setLikeCount] = useState(0);
-
-  // const handleAddLike = () => {
-  //     setLikeCount(likeCount + 1);
-  // }
-
-  // const handleSubtractLike = () => {
-  //   if (likeCount > 0) {
-  //     setLikeCount(likeCount - 1);
-  //   }
-  // }
 
   return (
     <div>

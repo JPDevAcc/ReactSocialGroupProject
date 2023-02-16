@@ -2,12 +2,12 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Likes from './Likes';
 import Comments from './Comments';
+import Comment from './Comment';
+import "./socialCards.css"
 
 export default function SocialCard(props) {
 	const cardDef = props.cardDef ;
 	const user = props.user ;
-	
-
 
 	return (
 		<>
@@ -32,6 +32,8 @@ export default function SocialCard(props) {
 				handleDislike={() => props.handleDislike()}
 					
 				/>
+				<Comments comments={cardDef.comments} />
+				
 			</Card.Body>
 		</Card>
 		
