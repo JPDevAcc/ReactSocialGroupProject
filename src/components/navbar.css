@@ -1,1 +1,22 @@
-.nav1, .nav-link {color: #378BA4 !important}
+.navbar {
+	padding-left: 8px ;
+	padding-right: 8px ;
+}
+.nav1, .navbar-username {
+	color: #579BB4 !important ;
+	font-weight: 600;
+}
+.nav-link {
+	color: #bcd !important ;
+	font-weight: 600;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+ .logout-btn {
+    color: #fff;
+    background-color: #03256cff;
+    border-color: #03256cff;
+}

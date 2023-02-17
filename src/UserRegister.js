@@ -46,7 +46,7 @@ export default function UserRegister(props) {
 	}
 	// Get current HTML success message
 	function getSuccessMessageHtml() {
-		return utils.getMessageHtml(successMsg) ;
+		return utils.getMessageHtml(successMsg, 'success') ;
 	}
 	// Returns boolean denoting whether there is currently an error
 	function isError() {
@@ -84,6 +84,7 @@ export default function UserRegister(props) {
 	// Template
   return (
 		<div>
+			<h1>Create Account</h1>
 			{getErrorMessageHtml()}
 			{getSuccessMessageHtml()}
 
@@ -132,9 +133,9 @@ export default function UserRegister(props) {
 					/>
 				</Form.Group>
 				
-				<Button variant="primary" type="submit" disabled={isError() || successMsg}>
-					Register
-				</Button>
+				<div className="text-center my-4">
+					<Button variant="primary" type="submit" disabled={isError() || successMsg}>Register</Button>
+				</div>
 			</Form>
 		</div>
   );

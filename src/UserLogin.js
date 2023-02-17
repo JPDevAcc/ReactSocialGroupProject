@@ -22,7 +22,7 @@ export default function UserLogin(props) {
     newState[event.target.name] = event.target.value;
     setFormValues(newState);
   } ;
-	
+
 	// Handle form submission
   const submitHandler = (event) => {
     event.preventDefault();
@@ -34,6 +34,7 @@ export default function UserLogin(props) {
 	// Template
   return (
 		<div>
+			<h1>Login</h1>
 			{loginOkay !== false ? <div className="text-center text-danger">&nbsp;</div> : <div className="text-center text-danger">Incorrect username or password</div>}
 			
 			<Form onSubmit={(event) => submitHandler(event)}>
@@ -52,10 +53,9 @@ export default function UserLogin(props) {
 						onChange={(event)=>handleChange(event)}  
 					/>
 				</Form.Group>
-				
-				<Button variant="primary" type="submit">
-					Log in
-				</Button>
+				<div className="text-center my-4">
+					<Button variant="primary" type="submit">Log in</Button>
+				</div>
 			</Form>
 		</div>
   );
