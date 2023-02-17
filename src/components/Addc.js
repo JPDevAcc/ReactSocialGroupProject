@@ -7,7 +7,6 @@ import 'toastr/build/toastr.min.css';
 
 export default function Addc(props){
 	const formCommValues = {
-		name: "",
 		text: ""
 	}
 
@@ -30,26 +29,18 @@ export default function Addc(props){
   }
 
   const handleChange = (event) => {
-    
 		formCommValues[event.target.name] = event.target.value;
   }
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onSubmit(formCommValues.name, formCommValues.text);
+    props.onSubmit(formCommValues.text);
     toastr["success"]("Comment added", "Success")
   }
 
   return (
 		<div className="add-comment">
 			<Form onSubmit={(event) => submitHandler(event)}>
-				<Form.Group controlId="name">
-					<Form.Label>User Name</Form.Label>
-					<Form.Control 
-						name="name"
-						onChange={(event)=>handleChange(event)}  
-					/>
-				</Form.Group>
 				<Form.Group controlId="text">
 					<Form.Label>Comment</Form.Label>
 					<Form.Control 
