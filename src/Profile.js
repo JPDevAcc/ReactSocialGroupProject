@@ -1,7 +1,11 @@
+import { useParams } from 'react-router';
 import Card from 'react-bootstrap/Card';
 import "./Profile.css"
 
-export default function Profile({user}) {
+export default function Profile({users, currentUserId}) {
+	let { userId } = useParams(); 
+	const user = users[((userId === 'current') ? currentUserId : userId)] ;
+
   return (
 		<div>
 			<h1>User Profile</h1>
@@ -11,7 +15,7 @@ export default function Profile({user}) {
 						<div className="user-avatar">
 							<img src={user.imageUrl} alt="" />
 						</div>
-						<div class="user-name">{user.username}</div>
+						<div className="user-name">{user.username}</div>
 					</div>
 				</Card.Header>
 				<Card.Body>
