@@ -1,6 +1,6 @@
 /* This project is based off https://github.com/TDAWebDevBootcamp/Example-Todo-list */
 
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import { Navigate, Routes, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
@@ -58,7 +58,6 @@ function App() {
 	function addUser(newUser) {
 		const userId = getNextUserId() ;
 		const user = { [userId]: newUser };
-    localStorage.setItem("users", JSON.stringify({...users, ...user}))
     changeUsers((users) => ({...users, ...user}));
 	}
 
@@ -69,40 +68,38 @@ function App() {
 			return usersNew ;
 		}
 		changeUsers(removeUserFunc) ;
-		localStorage.setItem("users", JSON.stringify(removeUserFunc(users))) ;
 		if (userId === currentUserId) {
 			changeCurrentUserId(null) ;
-			localStorage.setItem("currentUserId", null) ;
 		}
 	}
 
   const addCard = (userId, imageUrl, text,) => {
     const cardDef = { [getNextPostId()]: {userId, imageUrl, text, dislikeCount: 0, likeCount: 0, comments: {}} };
-
-    localStorage.setItem("cardDefs", JSON.stringify({...cardDefs, ...cardDef}))
     changeCardDefs((cardDefs) => ({...cardDefs, ...cardDef}));
   }
 
   const [nextCommentId, changeNextCommentId] = useState(0) ;
 
-function getNextCommentId() {
-	const nextComIdTemp = nextCommentId ;
-	changeNextCommentId(a => a + 1) ;
-	return nextComIdTemp ;
-}
+	function getNextCommentId() {
+		const nextComIdTemp = nextCommentId ;
+		changeNextCommentId(a => a + 1) ;
+		return nextComIdTemp ;
+	}
 
-function addComment(name, text, postId) {
-	const cardDefsNew = {...cardDefs} ;
-	const commentDef = { [getNextCommentId()]: {name, text} };
-	cardDefsNew[postId].comments = {...cardDefsNew[postId].comments, ...commentDef} ;
-	changeCardDefs(cardDefsNew) ; ///
-  }
+	function addComment(name, text, postId) {
+		const changeComments = (cardDefs) => {
+			const cardDefsNew = {...cardDefs} ;
+			const commentDef = { [getNextCommentId()]: {name, text} };
+			cardDefsNew[postId].comments = {...cardDefsNew[postId].comments, ...commentDef} ;
+			return cardDefsNew ;
+		}
+		changeCardDefs(changeComments) ; ;
+	}
 
 	function handleAddLike(postId) {
 		const changeLikeCountFunc = (cardDefs) => {
 			let cardDefsNew = {...cardDefs} ;
 			cardDefsNew[postId] = {...cardDefsNew[postId], likeCount: cardDefsNew[postId].likeCount + 1} ;
-			localStorage.setItem("cardDefs", JSON.stringify(cardDefsNew)) ;
 			return cardDefsNew ;
 		}
 		changeCardDefs(changeLikeCountFunc) ;
@@ -112,7 +109,6 @@ function addComment(name, text, postId) {
 		const changeDislikeCountFunc = (cardDefs) => {
 			let cardDefsNew = {...cardDefs} ;
 			cardDefsNew[postId] = {...cardDefsNew[postId] , dislikeCount: cardDefsNew[postId].dislikeCount + 1} ;
-			localStorage.setItem("cardDefs", JSON.stringify(cardDefsNew)) ;
 			return cardDefsNew ;
 		}
 		changeCardDefs(changeDislikeCountFunc) ;
@@ -126,12 +122,31 @@ function addComment(name, text, postId) {
     initWithData(users, cardDefs, currentUserId) ;
   }, []) ;
 
+	// Update localStorage when component state changes so we can persist between 'sessions'.
+	const initialCallsRemaining = useRef(3);
+  useEffect(() => {
+		// (ignore calls in first render so we don't overwrite localstorage with default values)
+		 if (initialCallsRemaining.current > 0) {
+			initialCallsRemaining.current-- ;
+			return ;
+		}
+		localStorage.setItem("cardDefs", JSON.stringify(cardDefs)) ;
+		localStorage.setItem("users", JSON.stringify(users)) ;
+		localStorage.setItem("currentUserId", JSON.stringify(currentUserId)) ;
+  }, [cardDefs, users, currentUserId]) ;
+
 	function initWithData(users = {0: { ...adminUser }}, cardDefs = {}, currentUserId = null) {
 		changeUsers(users) ;
 		changeCurrentUserId(currentUserId) ;
 		changeNextUserId(nextIdFromData(users)) ;
 		changeCardDefs(cardDefs) ;
 		changeNextPostId(nextIdFromData(cardDefs)) ;
+		let nextCommentId = -1 ;
+		Object.values(cardDefs).forEach(cardDef => {
+			nextCommentId = Object.keys(cardDef.comments).reduce((max, id) => Math.max(max, id), nextCommentId) ;
+		}) ;
+		nextCommentId++ ;
+		changeNextCommentId(nextCommentId) ;
 	}
 
 	function nextIdFromData(data) {
@@ -149,7 +164,6 @@ function addComment(name, text, postId) {
 		const credentialsMatch = (userId !== null && formValues.password === users[userId].password) ; // User exists and passwords match?
 		if (credentialsMatch) {
 			changeCurrentUserId(userId) ; // Make this the current user if credentials were okay
-			localStorage.setItem("currentUserId", JSON.stringify(userId)) ;
 		}
 		return credentialsMatch ;
 	}
