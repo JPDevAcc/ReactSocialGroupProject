@@ -33,3 +33,8 @@ export function getMessageHtml(msg, type = 'err') {
 export function isError(errorStatusList) {
 	return (getError(errorStatusList) !== null) ;
 }
+
+// Get next id number from the specified object
+export function nextIdFromData(data) {
+	return Object.keys(data).reduce((max, id) => Math.max(max, id), -1) + 1 ;
+}
