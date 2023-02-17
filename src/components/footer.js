@@ -8,7 +8,7 @@ export default function App() {
       <section  className='d-flex justify-content-center justify-content-lg-between p-4 border-bottom'>
         <div className='me-5 d-none d-lg-block' id='logo2'>
           <span>Get connected with us on social networks:</span>
-          <img src="/images/logo.png" alt="Logo Goes Here" className='logo'/>
+          <img src="images/logo.png" alt="Logo Goes Here" className='logo'/>
           
         </div>
 
