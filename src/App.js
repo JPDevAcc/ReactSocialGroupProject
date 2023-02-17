@@ -197,8 +197,8 @@ function App() {
 					} />}
 
 					{currentUserId !== null && 
-						<Route path="/profile" element={
-							<Profile user={users[currentUserId]} removeUser={removeUser} clearDB={clearData} />
+						<Route path="/profile/:userId" element={
+							<Profile users={users} currentUserId={currentUserId} removeUser={removeUser} clearDB={clearData} />
 					} />}
 					
 					{currentUserId === "0" && 
