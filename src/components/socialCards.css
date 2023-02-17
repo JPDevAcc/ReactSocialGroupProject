@@ -92,7 +92,8 @@ body {
 }
 
 .user-avatar img {
-    width: 100px;
+    border: none !important;
+    width: 100px !important;
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
@@ -103,11 +104,17 @@ body {
     color: aliceblue;
     font-size: large;
     margin: 10px;
+    text-align: left;
     font-family: cursive;
 
 }
 
-/* .social-card-user-heading {} */
+.social-card-user-heading {
+    display: flex;
+    justify-items: center;
+    flex-direction: column;
+    padding-left: 40%;
+}
 
 /* .user-register {
     box-shadow: 0 0 10px 0 rgb(54, 10, 93);
