@@ -3,9 +3,12 @@ import Card from 'react-bootstrap/Card';
 import "./Profile.css"
 
 export default function Profile({users, currentUserId}) {
+
+	// Get specified user (current or given id)
 	let { userId } = useParams(); 
 	const user = users[((userId === 'current') ? currentUserId : userId)] ;
 
+	// Template
   return (
 		<div>
 			<h1>User Profile</h1>
@@ -21,7 +24,7 @@ export default function Profile({users, currentUserId}) {
 				<Card.Body>
 					<Card.Text>
 						{user.bio}
-					</Card.Text>					
+					</Card.Text>
 				</Card.Body>
 			</Card>
 		</div>

@@ -13,9 +13,10 @@ import View from './View'
 import Add from './Add';
 import Footer from './components/footer';
 import "./App.css"
+import { nextIdFromData } from "./utils/utils";
 
 function App() {
-	// Users state
+	// ======= Users state =======
 	const adminUser = {
 		username: 'Admin',
 		password: 'Admin123', // Who needs cryptographic hash functions or strong passwords?
@@ -46,15 +47,6 @@ function App() {
 		return nextIdTemp ;
 	}
 
-  const [cardDefs, changeCardDefs] = useState({}) ;
-	const [nextPostId, changeNextPostId] = useState(0) ;
-
-	function getNextPostId() {
-		const nextPostIdTemp = nextPostId ;
-		changeNextPostId(a => a + 1) ;
-		return nextPostIdTemp ;
-	}
-
 	function addUser(newUser) {
 		const userId = getNextUserId() ;
 		const user = { [userId]: newUser };
@@ -73,28 +65,34 @@ function App() {
 		}
 	}
 
+	function userLogin(formValues) {
+		const userId = getUserId(formValues.username) ;
+		const credentialsMatch = (userId !== null && formValues.password === users[userId].password) ; // User exists and passwords match?
+		if (credentialsMatch) {
+			changeCurrentUserId(userId) ; // Make this the current user if credentials were okay
+		}
+		return credentialsMatch ;
+	}
+
+	function userLogout() {
+		changeCurrentUserId(null) ;
+	}
+
+	// ======= Cards State =======
+
+  const [cardDefs, changeCardDefs] = useState({}) ;
+	const [nextPostId, changeNextPostId] = useState(0) ;
+
+	function getNextPostId() {
+		const nextPostIdTemp = nextPostId ;
+		changeNextPostId(a => a + 1) ;
+		return nextPostIdTemp ;
+	}
+
   const addCard = (userId, imageUrl, text,) => {
     const cardDef = { [getNextPostId()]: {userId, imageUrl, text, dislikeCount: 0, likeCount: 0, comments: {}} };
     changeCardDefs((cardDefs) => ({...cardDefs, ...cardDef}));
   }
-
-  const [nextCommentId, changeNextCommentId] = useState(0) ;
-
-	function getNextCommentId() {
-		const nextComIdTemp = nextCommentId ;
-		changeNextCommentId(a => a + 1) ;
-		return nextComIdTemp ;
-	}
-
-	function addComment(name, text, postId) {
-		const changeComments = (cardDefs) => {
-			const cardDefsNew = {...cardDefs} ;
-			const commentDef = { [getNextCommentId()]: {name, text} };
-			cardDefsNew[postId].comments = {...cardDefsNew[postId].comments, ...commentDef} ;
-			return cardDefsNew ;
-		}
-		changeCardDefs(changeComments) ; ;
-	}
 
 	function handleAddLike(postId) {
 		const changeLikeCountFunc = (cardDefs) => {
@@ -114,11 +112,33 @@ function App() {
 		changeCardDefs(changeDislikeCountFunc) ;
 	}
 
+	// ======= Comments State (nested in Cards State) =======
+
+  const [nextCommentId, changeNextCommentId] = useState(0) ;
+
+	function getNextCommentId() {
+		const nextComIdTemp = nextCommentId ;
+		changeNextCommentId(a => a + 1) ;
+		return nextComIdTemp ;
+	}
+
+	function addComment(name, text, postId) {
+		const changeComments = (cardDefs) => {
+			const cardDefsNew = {...cardDefs} ;
+			const commentDef = { [getNextCommentId()]: {name, text} };
+			cardDefsNew[postId].comments = {...cardDefsNew[postId].comments, ...commentDef} ;
+			return cardDefsNew ;
+		}
+		changeCardDefs(changeComments) ; ;
+	}
+
+	// ======================================================
+
 	// Restore from localStorage on component mount
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("users")) || undefined ;
-    const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) || undefined ;
-    const currentUserId = JSON.parse(localStorage.getItem("currentUserId")) || undefined ;
+		const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) || undefined ;
+		const currentUserId = JSON.parse(localStorage.getItem("currentUserId")) || undefined ;
     initWithData(users, cardDefs, currentUserId) ;
   }, []) ;
 
@@ -135,6 +155,7 @@ function App() {
 		localStorage.setItem("currentUserId", JSON.stringify(currentUserId)) ;
   }, [cardDefs, users, currentUserId]) ;
 
+	// Initialise state from given data
 	function initWithData(users = {0: { ...adminUser }}, cardDefs = {}, currentUserId = null) {
 		changeUsers(users) ;
 		changeCurrentUserId(currentUserId) ;
@@ -149,29 +170,13 @@ function App() {
 		changeNextCommentId(nextCommentId) ;
 	}
 
-	function nextIdFromData(data) {
-		return Object.keys(data).reduce((max, id) => Math.max(max, id), -1) + 1 ;
-	}
-
 	// Clear everything!
 	function clearData() {
 		initWithData() ;
 		localStorage.clear() ;
 	}
 
-	function userLogin(formValues) {
-		const userId = getUserId(formValues.username) ;
-		const credentialsMatch = (userId !== null && formValues.password === users[userId].password) ; // User exists and passwords match?
-		if (credentialsMatch) {
-			changeCurrentUserId(userId) ; // Make this the current user if credentials were okay
-		}
-		return credentialsMatch ;
-	}
-
-	function userLogout() {
-		changeCurrentUserId(null) ;
-	}
-
+	// Template
 	return (
 		<div>
 			<MyNavBar username={currentUserId === null ? null : users[currentUserId].username} userLogout={userLogout} clearData={clearData} />

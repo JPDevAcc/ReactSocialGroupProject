@@ -6,6 +6,7 @@ export default function Admin({users, removeUser, clearDB}) {
     removeUser(event.target.dataset.id);
   }
 
+	// Template
   return (
 		<div>
 			<h1>Administration</h1>
