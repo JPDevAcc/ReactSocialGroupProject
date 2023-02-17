@@ -8,6 +8,7 @@ import MyNavBar from './components/navbar' ;
 import UserRegister from './UserRegister' ;
 import UserLogin from './UserLogin' ;
 import Admin from './Admin' ;
+import Profile from './Profile' ;
 import View from './View'
 import Add from './Add';
 import Footer from './components/footer';
@@ -172,8 +173,8 @@ function addComment(name, text, postId) {
 					} />
 					
           {currentUserId !== null &&
-					<Route path="/view" element={
-						<View onSubmit={ addComment } cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
+						<Route path="/view" element={
+							<View onSubmit={ addComment } cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
            } />}
  
 					{currentUserId !== null &&
@@ -181,6 +182,11 @@ function addComment(name, text, postId) {
 							<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
 					} />}
 
+					{currentUserId !== null && 
+						<Route path="/profile" element={
+							<Profile user={users[currentUserId]} removeUser={removeUser} clearDB={clearData} />
+					} />}
+					
 					{currentUserId === "0" && 
 						<Route path="/admin" element={
 							<Admin users={users} removeUser={removeUser} clearDB={clearData} />
