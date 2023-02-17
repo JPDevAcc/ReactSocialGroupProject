@@ -3,12 +3,9 @@ import "./socialCards.css"
 
 export default function Comments(props) {
   const comments = Object.entries(props.comments).map(([commentId, commentDef]) => {
-    console.log({commentId})
     
     return (
-      <div className="comment">
       <Comment commentDef={commentDef} key={commentId} />
-      </div>
     );
   });
 
