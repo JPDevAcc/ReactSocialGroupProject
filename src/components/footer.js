@@ -43,8 +43,7 @@ export default function App() {
                 React Social Group Project
               </h6>
               <p>
-                Lorem ipsum dolor sit amet,
-                consectetur adipisicing elit.
+                This is our React Social Group Project.
               </p>
             </MDBCol>
 
