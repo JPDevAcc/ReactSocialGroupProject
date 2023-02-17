@@ -122,9 +122,10 @@ function App() {
 		return nextComIdTemp ;
 	}
 
-	function addComment(name, text, postId) {
+	function addComment(text, postId) {
 		const changeComments = (cardDefs) => {
 			const cardDefsNew = {...cardDefs} ;
+			const name = users[currentUserId].username ;
 			const commentDef = { [getNextCommentId()]: {name, text} };
 			cardDefsNew[postId].comments = {...cardDefsNew[postId].comments, ...commentDef} ;
 			return cardDefsNew ;
@@ -182,39 +183,40 @@ function App() {
 			<MyNavBar username={currentUserId === null ? null : users[currentUserId].username} userLogout={userLogout} clearData={clearData} />
 
 			<Container className="my-container">
-				<Routes>
-					<Route path="/" element={
-						<UserLogin onSubmit={userLogin} />
-					} />
+				<main>
+					<Routes>
+						<Route path="/" element={
+							<UserLogin onSubmit={userLogin} />
+						} />
 
-					<Route path="/register" element={
-						<UserRegister getUserId={getUserId} onSubmit={addUser} />
-					} />
-					
-          {currentUserId !== null &&
-						<Route path="/view" element={
-							<View onSubmit={ addComment } cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
-           } />}
- 
-					{currentUserId !== null &&
-						<Route path="/add" element={
-							<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
-					} />}
+						<Route path="/register" element={
+							<UserRegister getUserId={getUserId} onSubmit={addUser} />
+						} />
+						
+						{currentUserId !== null &&
+							<Route path="/view" element={
+								<View onSubmit={ addComment } cardDefs={cardDefs} users={users} handleDislike={(postId) => handleDislike(postId)} handleAddLike={(postId) => handleAddLike(postId)} />
+						} />}
+	
+						{currentUserId !== null &&
+							<Route path="/add" element={
+								<Add onSubmit={(imageUrl, text) => addCard(currentUserId, imageUrl, text)} />
+						} />}
 
-					{currentUserId !== null && 
-						<Route path="/profile/:userId" element={
-							<Profile users={users} currentUserId={currentUserId} removeUser={removeUser} clearDB={clearData} />
-					} />}
-					
-					{currentUserId === "0" && 
-						<Route path="/admin" element={
-							<Admin users={users} removeUser={removeUser} clearDB={clearData} />
-					} />}
-					
- 					<Route path="*" element={<Navigate to="/" replace />} />
+						{currentUserId !== null && 
+							<Route path="/profile/:userId" element={
+								<Profile users={users} currentUserId={currentUserId} removeUser={removeUser} clearDB={clearData} />
+						} />}
+						
+						{currentUserId === "0" && 
+							<Route path="/admin" element={
+								<Admin users={users} removeUser={removeUser} clearDB={clearData} />
+						} />}
+						
+						<Route path="*" element={<Navigate to="/" replace />} />
 
-				</Routes>
-
+					</Routes>
+				</main>
 			</Container>
 			<Footer className="footer"/>
 			

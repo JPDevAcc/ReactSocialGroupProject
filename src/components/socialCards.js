@@ -15,15 +15,15 @@ export default function SocialCards(props) {
 		const handleDislike = () => {
 			props.handleDislike(postId) ;
 		} ;
-		const addComments = (name, text) => {
-			props.onSubmit(name, text, postId) ;
+		const addComments = (text) => {
+			props.onSubmit(text, postId) ;
 		} ;
 
 		return (
 			<>
 			<div className="single-post" key={postId} >
-			<SocialCard cardDef={cardDef} user={props.users[cardDef.userId]} handleAddLike={handleAddLike} handleDislike={handleDislike} />
-			<Addc onSubmit={addComments} />
+				<SocialCard cardDef={cardDef} user={props.users[cardDef.userId]} handleAddLike={handleAddLike} handleDislike={handleDislike} />
+				<Addc onSubmit={addComments} />
 			</div>
 			</>
 		) ;
