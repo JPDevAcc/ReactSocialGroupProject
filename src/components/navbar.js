@@ -20,7 +20,7 @@ export default function MyNavbar(props) {
 						<Link className="nav-link" to="/">Login</Link>
 						<Link className="nav-link" to="/register">Register</Link>
 						<Link className={props.username ? 'nav-link' : 'd-none'} to="/view">View Posts</Link>
-						<Link className={props.username ? 'nav-link' : 'd-none'} to="/add">Upload</Link>
+						<Link className={props.username ? 'nav-link' : 'd-none'} to="/add">Add Post</Link>
 					</Nav>
 					<div className="d-flex">
 						{props.username && <div className="me-4 align-self-center navbar-username">Logged in as: <Link to="/profile"><b>{props.username}</b></Link></div>}
