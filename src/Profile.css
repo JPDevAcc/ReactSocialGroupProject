@@ -1,0 +1,23 @@
+.profile-card {
+	width: 50% ;
+	margin: auto ;
+}
+.user-avatar {
+	width: 128px ;
+	display:flex;
+	align-items: center;
+}
+.user-avatar img {
+	width: 100% ;
+	border: 2px inset black ;
+	
+}
+.profile-card-user-heading {
+	display: flex ;
+	align-content : center ;
+}
+.user-name {
+	align-self: center;
+	font-size: 200%;
+	margin: 0 0 0.25em 0.5em;
+}

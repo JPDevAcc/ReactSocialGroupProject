@@ -23,7 +23,7 @@ export default function MyNavbar(props) {
 						<Link className={props.username ? 'nav-link' : 'd-none'} to="/add">Post</Link>
 					</Nav>
 					<div className="d-flex">
-						{props.username && <div className="me-4 align-self-center navbar-username">Logged in as <b>{props.username}</b></div>}
+						{props.username && <div className="me-4 align-self-center navbar-username">Logged in as <Link to="/profile"><b>{props.username}</b></Link></div>}
 						{props.username && <Button onClick={props.userLogout} className="me-2">Log out</Button>}
 						{(props.username === 'Admin') && <Button onClick={toAdminPage}>Admin</Button>}
 					</div>
