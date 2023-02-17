@@ -1,5 +1,6 @@
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+import "./socialCards.css"
 
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
@@ -36,11 +37,11 @@ export default function Addc(props){
   const submitHandler = (event) => {
     event.preventDefault();
     props.onSubmit(formCommValues.name, formCommValues.text);
-    toastr["success"]("Post added", "Success")
+    toastr["success"]("Comment added", "Success")
   }
 
   return (
-		<div>
+		<div className="add-comment">
 			<Form onSubmit={(event) => submitHandler(event)}>
 				<Form.Group controlId="name">
 					<Form.Label>User Name</Form.Label>
@@ -50,7 +51,7 @@ export default function Addc(props){
 					/>
 				</Form.Group>
 				<Form.Group controlId="text">
-					<Form.Label>Message</Form.Label>
+					<Form.Label>Comment</Form.Label>
 					<Form.Control 
 						name="text"
 						onChange={(event)=>handleChange(event)}  

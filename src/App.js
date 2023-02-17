@@ -117,8 +117,8 @@ function App() {
 	// Restore from localStorage on component mount
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("users")) || undefined ;
-		const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) || undefined ;
-		const currentUserId = JSON.parse(localStorage.getItem("currentUserId")) || undefined ;
+    const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) || undefined ;
+    const currentUserId = JSON.parse(localStorage.getItem("currentUserId")) || undefined ;
     initWithData(users, cardDefs, currentUserId) ;
   }, []) ;
 
