@@ -13,18 +13,18 @@ export default function MyNavbar(props) {
 	return (
 		<div>
 			<Navbar bg="dark" expand="md">
-				<Navbar.Brand className="nav1">Social Cards</Navbar.Brand>
+				<Navbar.Brand className="nav1">React Social Media Project </Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="me-auto">
 						<Link className="nav-link" to="/">Login</Link>
 						<Link className="nav-link" to="/register">Register</Link>
-						<Link className={props.username ? 'nav-link' : 'd-none'} to="/view">View</Link>
-						<Link className={props.username ? 'nav-link' : 'd-none'} to="/add">Post</Link>
+						<Link className={props.username ? 'nav-link' : 'd-none'} to="/view">View Posts</Link>
+						<Link className={props.username ? 'nav-link' : 'd-none'} to="/add">Add Post</Link>
 					</Nav>
 					<div className="d-flex">
-						{props.username && <div className="me-4 align-self-center navbar-username">Logged in as <Link to="/profile"><b>{props.username}</b></Link></div>}
-						{props.username && <Button onClick={props.userLogout} className="me-2">Log out</Button>}
+						{props.username && <div className="me-4 align-self-center navbar-username">Logged in as: <Link to="/profile"><b>{props.username}</b></Link></div>}
+						{props.username && <Button onClick={props.userLogout} className="me-2 logout-btn">Log out</Button>}
 						{(props.username === 'Admin') && <Button onClick={toAdminPage}>Admin</Button>}
 					</div>
 				</Navbar.Collapse>
