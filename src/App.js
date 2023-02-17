@@ -101,8 +101,8 @@ function addComment(name, text, postId) {
 	// clearData() ;
     const users = JSON.parse(localStorage.getItem("users")) ;
 		const cardDefs = JSON.parse(localStorage.getItem("cardDefs")) ;
-		const commentDefs = JSON.parse(localStorage.getItem("commentDefs")) ;
-    initWithData(users, cardDefs, commentDefs) ;
+		// const commentDefs = JSON.parse(localStorage.getItem("commentDefs")) ;
+    initWithData(users, cardDefs) ;
   }, []) ;
 
 	function initWithData(users, cardDefs) {

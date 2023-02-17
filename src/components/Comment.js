@@ -5,7 +5,7 @@ function Comment(props){
   return (
 		<div>
 					<div>
-          <h3>{commentDef.name}</h3>
+          <h5>{commentDef.name}</h5>
 					<p>{commentDef.text}</p>
           </div>			
 		</div>

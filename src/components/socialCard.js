@@ -16,7 +16,7 @@ export default function SocialCard(props) {
 					<div className="user-avatar">
 						<img src={user.imageUrl} alt="" />
 					</div>
-					<div>{user.username}</div>
+					<div className="post-username">{user.username}</div>
 				</div>
 			</Card.Header>
 			<Card.Img variant="top" src={cardDef.imageUrl} />

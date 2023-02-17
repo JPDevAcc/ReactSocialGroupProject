@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom";
 import * as utils from "./utils/utils";
 
+
 export default function UserRegister(props) {
 	const navigate = useNavigate();
 
