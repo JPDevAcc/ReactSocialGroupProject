@@ -143,8 +143,13 @@ function App() {
     initWithData(users, cardDefs, currentUserId) ;
   }, []) ;
 
-	// Update localStorage when component state changes so we can persist between 'sessions'.
-	const initialCallsRemaining = useRef(3);
+	// === Update localStorage when component state changes so we can persist between 'sessions' ===
+	/* 	Counter for initial useEffect() calls to ignore
+	*		Non-optimised build seems to call this 3 times but optimised (e.g. GitHub pages deployment) seems to call it only twice (why????)
+	*		As per https://maksimrv.medium.com/usestate-with-callback-d574298eb8bd this has been changed from 3 to 1
+	*		as it appears to give the required behaviour in both builds
+	*/
+	const initialCallsRemaining = useRef(1);
   useEffect(() => {
 		// (ignore calls in first render so we don't overwrite localstorage with default values)
 		 if (initialCallsRemaining.current > 0) {
