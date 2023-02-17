@@ -1,8 +1,7 @@
 .my-container {
-    font-style: oblique;
-    font-weight: 700;
-    color: #03256cff;
-    min-height: max(200vh, 800px);
-    width: 100%;
-    /* padding: 0 20px; */
+  font-style: oblique;
+  font-weight: 700;
+  color: #03256cff;
+  min-height: max(200vh, 800px);
+  width: 100%;
 }

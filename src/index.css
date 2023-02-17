@@ -1,11 +1,11 @@
 .omg {
-    box-shadow: 0 0 10px 0 rgb(54, 10, 93);
+  	box-shadow: 0 0 10px 0 rgb(54, 10, 93);
 }
 
 #submit-btn{
-    margin-top: 20px;
-    border-radius: 10px;
-    align-items: center;
-    justify-content: center;
-    display: flex;
+	margin-top: 20px;
+	border-radius: 10px;
+	align-items: center;
+	justify-content: center;
+	display: flex;
 }

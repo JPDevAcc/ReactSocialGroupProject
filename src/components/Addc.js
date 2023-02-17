@@ -55,6 +55,4 @@ export default function Addc(props){
 			</Form>
 		</div>
   );
-
 }
-

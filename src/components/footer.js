@@ -46,11 +46,7 @@ export default function App() {
                 This is our React Social Group Project.
               </p>
             </MDBCol>
-
-
-          
-
-            
+						 
           </MDBRow>
         </MDBContainer>
       </section>
