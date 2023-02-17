@@ -1,7 +1,7 @@
 /* This project is based off https://github.com/TDAWebDevBootcamp/Example-Todo-list */
 
 import {useState, useEffect} from 'react';
-import { Routes,Route } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import MyNavBar from './components/navbar' ;
@@ -186,6 +186,8 @@ function addComment(name, text, postId) {
 							<Admin users={users} removeUser={removeUser} clearDB={clearData} />
 					} />}
 					
+ 					<Route path="*" element={<Navigate to="/" replace />} />
+
 				</Routes>
 
 			</Container>
