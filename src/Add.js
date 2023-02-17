@@ -1,8 +1,8 @@
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
+import './index.css';
 
 function Add(props){
 	const formValues = {
@@ -40,24 +40,23 @@ function Add(props){
   }
 
   return (
-		<div>
+		<div className="container">
 			<Form onSubmit={(event) => submitHandler(event)}>
 				<Form.Group controlId="imageUrl">
 					<Form.Label>Image URL</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="imageUrl"
 						onChange={(event)=>handleChange(event)}  
 					/>
 				</Form.Group>
 				<Form.Group controlId="text">
 					<Form.Label>Message</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="text"
 						onChange={(event)=>handleChange(event)}  
 					/>
 				</Form.Group>
-				
-				<Button variant="primary" type="submit">
+				<Button variant="primary" id='submit-btn' type="submit">
 					Submit
 				</Button>
 			</Form>

@@ -1,9 +1,8 @@
 .my-container {
+    font-style: oblique;
+    font-weight: 700;
+    color: #03256cff;
     min-height: max(200vh, 800px);
-    /* Ensure footer is far enough down if the rest of the content takes up insufficient vertical space */
-
-    /* justify-content: space-around; */
-    /* margin: 0 auto; */
     width: 100%;
     /* padding: 0 20px; */
 }

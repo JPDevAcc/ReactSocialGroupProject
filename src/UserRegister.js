@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom";
 import * as utils from "./utils/utils";
-
+import './index.css';
 
 export default function UserRegister(props) {
 	const navigate = useNavigate();
@@ -83,7 +83,7 @@ export default function UserRegister(props) {
 
 	// Template
   return (
-		<div>
+		<div className="user-register">
 			<h1>Create Account</h1>
 			{getErrorMessageHtml()}
 			{getSuccessMessageHtml()}
@@ -91,7 +91,7 @@ export default function UserRegister(props) {
 			<Form onSubmit={(event) => submitHandler(event)}>
 				<Form.Group controlId="username">
 					<Form.Label>Username</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="username"
 						onChange={(event)=>handleChange(event)}
 						disabled={successMsg}
@@ -99,7 +99,7 @@ export default function UserRegister(props) {
 				</Form.Group>
 				<Form.Group controlId="password">
 					<Form.Label>Password (min {pwdMinLength} characters)</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="password"
 						type="password"
 						onChange={(event)=>handleChange(event)}  
@@ -108,7 +108,7 @@ export default function UserRegister(props) {
 				</Form.Group>
 				<Form.Group controlId="password_confirm">
 					<Form.Label>Confirm Password</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="password_confirm"
 						type="password"
 						onChange={(event)=>handleChange(event)}
@@ -117,7 +117,7 @@ export default function UserRegister(props) {
 				</Form.Group>
 				<Form.Group controlId="imageUrl">
 					<Form.Label>Profile Image URL</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="imageUrl"
 						onChange={(event)=>handleChange(event)}
 						disabled={successMsg}  
@@ -125,7 +125,7 @@ export default function UserRegister(props) {
 				</Form.Group>
 				<Form.Group controlId="bio">
 					<Form.Label>Bio</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="bio"
 						as="textarea"
 						onChange={(event)=>handleChange(event)}

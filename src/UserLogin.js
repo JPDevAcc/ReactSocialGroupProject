@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { useNavigate } from "react-router-dom";
 
+
 export default function UserLogin(props) {
 	const navigate = useNavigate();
 
@@ -33,21 +34,21 @@ export default function UserLogin(props) {
 
 	// Template
   return (
-		<div>
+		<div className="container">
 			<h1>Login</h1>
 			{loginOkay !== false ? <div className="text-center text-danger">&nbsp;</div> : <div className="text-center text-danger">Incorrect username or password</div>}
 			
 			<Form onSubmit={(event) => submitHandler(event)}>
 				<Form.Group controlId="username">
 					<Form.Label>Username</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="username"
 						onChange={(event)=>handleChange(event)}  
 					/>
 				</Form.Group>
 				<Form.Group controlId="password">
 					<Form.Label>Password</Form.Label>
-					<Form.Control 
+					<Form.Control className='omg'
 						name="password"
 						type="password"
 						onChange={(event)=>handleChange(event)}  
